@@ -120,27 +120,6 @@ const SipCalculatator = () => {
     setSipData(sipValues);
   };
 
-  const getInvestmentMultiplier = () => {
-    switch (investmentInterval) {
-      case "daily":
-        return 30; // Assuming an average of 30 days in a month
-      case "weekly":
-        return 4; // 4 weeks in a month
-      case "monthly":
-        return 1; // 1 month
-      case "quarterly":
-        return 1 / 3; // 3 months in a quarter
-      case "yearly":
-        return 1 / 12; // 12 months in a year
-      default:
-        return 1;
-    }
-  };
-  const calculateTotalAmount = (investment, rate, years) => {
-    const interest = (investment * rate * years) / 100;
-    return investment + interest;
-  };
-  //
   const calculateSipValuesPerYear = () => {
     const sipValuesPerYear = [];
     let totalInvestedAmount = 0;
@@ -221,9 +200,9 @@ const SipCalculatator = () => {
   return (
     <div className="lg:mx-5 mx-2">
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
-        <p className="text-blue-950 font-semibold text-[30px]  ">
+        {/* <p className="text-blue-950 font-semibold text-[30px]  ">
           Sip <span className="text-green-700">Calculator</span>
-        </p>
+        </p> */}
         <div className="flex gap-2 my-2 ">
           {["daily", "weekly", "monthly", "quarterly", "yearly"].map(
             (interval) => (
