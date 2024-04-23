@@ -11,7 +11,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         <div>
           <a href="#" className="text-white font-bold text-xl">
-            Logo
+            Calculate4All
           </a>
         </div>
         {/* Hamburger menu button for small screens */}

@@ -1,43 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+
 import SipCalculatator from "./SipCalculator/SipCalculatator";
 import SipCalculateWithStepUp from "./SipCalculator/SipCalculateWithStepUp";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
 const CalculateAll = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
+
+  const [selectedComponent, setSelectedComponent] = useState({
+    value: "SipCalculatator",
+    label: "Sip Calculatator ",
+  });
+  const options = [
+    {
+      value: "SipCalculatator",
+      label: "Sip Calculatator ",
+    },
+    {
+      value: "SipCalculateWithStepUp",
+      label: "Step Up Sip",
+    },
+  ];
+
+  const handleChange = (selectedOption) => {
+    setSelectedComponent(selectedOption);
+  };
+
   return (
     <div>
-      <Navbar />
-      {activeTab == 0 && (
-        <div className="flex gap-2 items-baseline">
-          <p className="text-blue-950 font-semibold text-[30px]  ">
-            Sip <span className="text-green-700">Calculator</span>
-          </p>{" "}
-          <p
-            className="text-blue-950 font-semibold text-[16px] bg-slate-100 p-1 rounded  cursor-pointer"
-            onClick={() => setActiveTab(1)}
-          >
-            Step up Sip <span className="text-green-700"></span>
-          </p>{" "}
-        </div>
-      )}
-      {activeTab == 1 && (
-        <div className="flex  gap-2 items-baseline">
-          <p className="text-blue-950 font-semibold text-[30px]  ">
-            Step Up Sip <span className="text-green-700">Calculator</span>
-          </p>{" "}
-          <p
-            className="text-blue-950 font-semibold text-[16px] bg-slate-100 p-1 rounded cursor-pointer"
-            onClick={() => setActiveTab(0)}
-          >
-            Simple Sip <span className="text-green-700"></span>
-          </p>{" "}
-        </div>
-      )}
-      {activeTab == 0 && <SipCalculatator />}
-      {activeTab == 1 && <SipCalculateWithStepUp />}
-      <p></p>
-      <Footer />
+      <div
+        className="w-auto lg:w-[400px] mx-[2%] mt-[1%] font-extrabold "
+        style={{ zIndex: 999 }}
+      >
+        <Select
+          value={selectedComponent}
+          onChange={handleChange}
+          options={options}
+          placeholder="Select Component"
+        />
+      </div>
+
+      <div>
+        {selectedComponent && selectedComponent.value === "SipCalculatator" && (
+          <SipCalculatator />
+        )}
+        {selectedComponent &&
+          selectedComponent.value === "SipCalculateWithStepUp" && (
+            <SipCalculateWithStepUp />
+          )}
+      </div>
     </div>
   );
 };

@@ -14,26 +14,10 @@ const SipCalculateWithStepUp = () => {
   const [stepUpPercentage2, setStepUpPercentage2] = useState("5");
   const [stepUpPercentageSlider2, setStepUpPercentageSlider2] = useState("5");
   console.log(monthlyInvestment);
-  const formatIndianNumber = (number) => {
-    console.log(number);
-    const sanitizedValue = number.replace(/,/g, "");
-    if (sanitizedValue === "" || isNaN(sanitizedValue)) {
-      return "";
-    } else {
-      return new Intl.NumberFormat("en-IN").format(
-        parseInt(sanitizedValue, 10),
-        console.log(sanitizedValue)
-      );
-    }
-  };
 
   const handleInputChange = (e, setState, setSliderState) => {
     let value = e.target.value;
-    const maxValue = getMaxInvestmentValue();
-    console.log(maxValue);
-    if (parseInt(value.replace(/,/g, ""), 10)) {
-      value = formatIndianNumber(maxValue.toString());
-    }
+
     setState(value);
     setSliderState(value);
   };
@@ -276,7 +260,9 @@ const SipCalculateWithStepUp = () => {
               <p className="capitalize">{investmentInterval} Investment</p>
               <input
                 type="text"
-                value={formatIndianNumber(monthlyInvestment)}
+                value={monthlyInvestment?.toLocaleString("en-IN", {
+                  maximumFractionDigits: 0,
+                })}
                 onChange={(e) =>
                   handleInputChange(
                     e,
@@ -475,7 +461,196 @@ const SipCalculateWithStepUp = () => {
             height={300}
           />{" "}
         </aside>
+        <aside className="lg:w-1/2 ">
+          <ReactApexChart
+            options={{
+              chart: {
+                id: "bar-chart",
+              },
+              title: {
+                text: "BAR",
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                  columnWidth: "55%",
+                  endingShape: "rounded",
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              stroke: {
+                show: true,
+                width: 2,
+                colors: ["transparent"],
+              },
+              xaxis: {
+                categories: ["Investment vs Return"], // X-axis categories
+              },
+              yaxis: {
+                title: {
+                  text: "Amount",
+                },
+                labels: {
+                  formatter: function (value) {
+                    return value.toFixed(2);
+                  },
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+            }}
+            series={[
+              {
+                name: "Invested Amount",
+                data: [investedAmount],
+              },
+              {
+                name: "Return On Investment",
+                data: [returnOnInvestment],
+              },
+            ]}
+            type="bar"
+            height={300}
+          />{" "}
+        </aside>
       </div>
+      <aside className="overflow-auto">
+        <div
+          className={`${
+            timePeriod > 20 ? "w-[1000px] lg:w-[98%]" : "lg:w-[98%]"
+          }`}
+        >
+          <ReactApexChart
+            options={{
+              chart: {
+                type: "bar",
+                height: 350,
+              },
+              title: {
+                text: "YEARLY BAR",
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                  columnWidth: "55%",
+                  endingShape: "rounded",
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              stroke: {
+                show: true,
+                width: 2,
+                colors: ["transparent"],
+              },
+              xaxis: {
+                categories: sipValuesPerYear.map((data) => data.year), // X-axis categories
+                title: {
+                  text: "Years",
+                },
+              },
+              yaxis: {
+                title: {
+                  text: "Amount",
+                },
+                labels: {
+                  formatter: function (value) {
+                    if (value >= threshold) {
+                      return (value / 1000).toFixed(1) + "k"; // Convert value to thousands
+                    } else {
+                      return value.toFixed(2);
+                    }
+                  },
+                },
+              },
+              fill: {
+                opacity: 1,
+              },
+              tooltip: {
+                y: {
+                  formatter: function (val) {
+                    return "Rs " + val + "";
+                  },
+                },
+              },
+            }}
+            series={[
+              {
+                name: "Invested Amount",
+                data: sipValuesPerYear.map((data) => data.invested.toFixed(2)),
+              },
+              {
+                name: "Return on Investment",
+                data: sipValuesPerYear.map((data) => data.roi.toFixed(2)),
+              },
+            ]}
+            type="bar"
+            height={350}
+          />
+        </div>
+      </aside>{" "}
+      <aside
+        className={`${
+          timePeriod > 20 ? "overflow-auto lg:overflow-hidden " : ""
+        }`}
+      >
+        <div
+          className={`${
+            timePeriod > 20 ? "w-[1000px] lg:w-[95%] " : "lg:w-[95%]"
+          }`}
+        >
+          <ReactApexChart
+            options={{
+              chart: {
+                id: "area-chart",
+                height: 350,
+              },
+              title: {
+                text: "YEARLY AREA",
+              },
+              xaxis: {
+                categories: sipValuesPerYear.map((data) => data.year), // Assuming x-axis as years
+                title: {
+                  text: "Years",
+                },
+              },
+              yaxis: {
+                title: {
+                  text: "Amount",
+                },
+                labels: {
+                  formatter: function (value) {
+                    if (value >= threshold) {
+                      return (value / 1000).toFixed(1) + "k"; // Convert value to thousands
+                    } else {
+                      return value.toFixed(2);
+                    }
+                  },
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+            }}
+            series={[
+              {
+                name: "Invested Amount",
+                data: sipValuesPerYear.map((data) => data.invested.toFixed(2)),
+              },
+              {
+                name: "Return on Investment",
+                data: sipValuesPerYear.map((data) => data.roi.toFixed(2)),
+              },
+            ]}
+            type="area"
+            height={300}
+          />{" "}
+        </div>
+      </aside>{" "}
     </div>
   );
 };

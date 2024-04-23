@@ -12,23 +12,9 @@ const SipCalculatator = () => {
   const [timePeriodSlider, setTimePeriodSlider] = useState("10");
   const [investmentInterval, setInvestmentInterval] = useState("monthly");
 
-  const formatIndianNumber = (number) => {
-    const sanitizedValue = number.replace(/,/g, "");
-    if (sanitizedValue === "" || isNaN(sanitizedValue)) {
-      return "";
-    } else {
-      return new Intl.NumberFormat("en-IN").format(
-        parseInt(sanitizedValue, 10)
-      );
-    }
-  };
-
   const handleInputChange = (e, setState, setSliderState) => {
     let value = e.target.value;
-    const maxValue = getMaxInvestmentValue();
-    if (parseInt(value.replace(/,/g, ""), 10) > maxValue) {
-      value = formatIndianNumber(maxValue.toString());
-    }
+
     setState(value);
     setSliderState(value);
   };
@@ -228,7 +214,9 @@ const SipCalculatator = () => {
               <p className="capitalize">{investmentInterval} Investment</p>
               <input
                 type="text"
-                value={formatIndianNumber(monthlyInvestment)}
+                value={monthlyInvestment?.toLocaleString("en-IN", {
+                  maximumFractionDigits: 0,
+                })}
                 onChange={(e) =>
                   handleInputChange(
                     e,
@@ -524,10 +512,14 @@ const SipCalculatator = () => {
           />
         </div>
       </aside>{" "}
-      <aside className="overflow-auto lg:overflow-hidden">
+      <aside
+        className={`${
+          timePeriod > 20 ? "overflow-auto lg:overflow-hidden " : ""
+        }`}
+      >
         <div
           className={`${
-            timePeriod > 20 ? "w-[1000px] lg:w-[98%]" : "lg:w-[98%]"
+            timePeriod > 20 ? "w-[1000px] lg:w-[95%] " : "lg:w-[95%]"
           }`}
         >
           <ReactApexChart

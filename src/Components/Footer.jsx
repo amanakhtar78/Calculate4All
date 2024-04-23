@@ -7,8 +7,8 @@ const Footer = () => {
     <footer className="bg-gray-800 text-white">
       <div className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 lg:flex justify-between items-center">
         <div className="lg:flex items-center">
-          <h1>LOGo</h1>
-          <p className="lg:ml-2 font-semibold">Your Company</p>
+          <h1>Calculate4All</h1>
+          <p className="lg:ml-2 font-semibold">Av Product</p>
         </div>
         <div className="my-5">
           <aside className=" space-x-4">
