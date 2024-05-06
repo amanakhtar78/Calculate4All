@@ -6,6 +6,9 @@ import Select from "react-select";
 
 import SipCalculatator from "./SipCalculator/SipCalculatator";
 import SipCalculateWithStepUp from "./SipCalculator/SipCalculateWithStepUp";
+import LumSum from "./SipCalculator/LumSum";
+import PPF from "./SipCalculator/PPF";
+import SukanyaSamriddhiYojanaCalculator from "./SipCalculator/SukanyaSamriddhiYojanaCalculator";
 const CalculateAll = () => {
   const navigate = useNavigate();
 
@@ -20,7 +23,19 @@ const CalculateAll = () => {
     },
     {
       value: "SipCalculateWithStepUp",
-      label: "Step Up Sip",
+      label: "Step Up Sip Calculatator",
+    },
+    {
+      value: "LumSum",
+      label: "Lum Sum Calculatator",
+    },
+    {
+      value: "PPF",
+      label: "PPF Calculatator",
+    },
+    {
+      value: "SukanyaSamriddhiYojanaCalculator",
+      label: "Sukanya Samriddhi Yojana Calculator",
     },
   ];
 
@@ -49,6 +64,14 @@ const CalculateAll = () => {
         {selectedComponent &&
           selectedComponent.value === "SipCalculateWithStepUp" && (
             <SipCalculateWithStepUp />
+          )}
+        {selectedComponent && selectedComponent.value === "LumSum" && (
+          <LumSum />
+        )}
+        {selectedComponent && selectedComponent.value === "PPF" && <PPF />}
+        {selectedComponent &&
+          selectedComponent.value === "SukanyaSamriddhiYojanaCalculator" && (
+            <SukanyaSamriddhiYojanaCalculator />
           )}
       </div>
     </div>

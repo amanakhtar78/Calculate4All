@@ -2,28 +2,41 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import moment from "moment";
 
-const SipCalculatator = () => {
+const SukanyaSamriddhiYojanaCalculator = () => {
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
-  const [expectedReturn, setExpectedReturn] = useState("12");
-  const [expectedReturnSlider, setExpectedReturnSlider] = useState("12");
-  const [timePeriod, setTimePeriod] = useState("10");
-  const [timePeriodSlider, setTimePeriodSlider] = useState("10");
+  const [expectedReturn, setExpectedReturn] = useState("8.1");
+  const [expectedReturnSlider, setExpectedReturnSlider] = useState("8.1");
+  const [timePeriod, setTimePeriod] = useState("15");
+  const [timePeriodSlider, setTimePeriodSlider] = useState("15");
   const [investmentInterval, setInvestmentInterval] = useState("monthly");
-
-  const handleInputChange = (e, setState, setSliderState) => {
-    let value = e.target.value;
-    setState(value);
-    setSliderState(value);
+  const [age, setAge] = useState(1); // Initial age state
+  const currentYear = new Date().getFullYear();
+  const [investedYear, setInvestedYear] = useState(currentYear); // Default invested year as current year
+  // Function to handle changes in the input for invested year
+  const handleInvestedYearChange = (e) => {
+    const year = parseInt(e.target.value);
+    setInvestedYear(isNaN(year) ? currentYear : year); // Set the year to the input value or current year if NaN
   };
 
-  const handleSliderChange = (e, setState, setSliderState) => {
-    const value = e.target.value;
-    setState(value);
-    setSliderState(value);
+  const maturityYear = investedYear + 21; // Calculate maturity year
+
+  // Function to handle changes in the input field
+  const handleGirlInputChange = (e) => {
+    let newAge = parseInt(e.target.value);
+    if (newAge < 1) {
+      newAge = 1;
+    } else if (newAge > 10) {
+      newAge = 10;
+    }
+    setAge(newAge);
   };
 
+  // Function to handle changes in the slider
+  const handleGirlSliderChange = (e) => {
+    setAge(parseInt(e.target.value));
+  };
   const getMaxInvestmentValue = () => {
     switch (investmentInterval) {
       case "daily":
@@ -38,6 +51,52 @@ const SipCalculatator = () => {
         return 12000000;
       default:
         return 1000000; // Default to monthly investment limit
+    }
+  };
+  const maxmoneyyear = {
+    daily: 410,
+    weekly: 410 * 7,
+    monthly: 12500,
+    quarterly: 12500 * 3,
+    yearly: 150000,
+  };
+
+  const handleInputChange = (e, setState, setSliderState) => {
+    let value = e.target.value.trim(); // Trim whitespace
+    if (value === "") {
+      setState(""); // Set state to empty string
+      setSliderState(""); // Set slider state to empty string
+      return; // Exit function
+    }
+    value = parseInt(value.replace(/\D/g, "")); // Remove non-digit characters and convert to integer
+    const maxValue = Math.min(
+      getMaxInvestmentValue(),
+      maxmoneyyear[investmentInterval]
+    ); // Get the minimum of max investment value and maxmoneyyear
+
+    // Check if the input value exceeds the maximum allowed value
+    if (value > maxValue) {
+      value = maxValue; // Set the value to the maximum allowed value
+    }
+
+    setState(value);
+    setSliderState(value);
+  };
+
+  const handleSliderChange = (e, setState, setSliderState) => {
+    const value = e.target.value;
+    const maxValue = Math.min(
+      getMaxInvestmentValue(),
+      maxmoneyyear[investmentInterval]
+    ); // Get the minimum of max investment value and maxmoneyyear
+
+    // Check if the slider value exceeds the maximum allowed value
+    if (value > maxValue) {
+      setState(maxValue); // Set the state to the maximum allowed value
+      setSliderState(maxValue);
+    } else {
+      setState(value);
+      setSliderState(value);
     }
   };
 
@@ -182,6 +241,22 @@ const SipCalculatator = () => {
   const returnOnInvestment = sipData.reduce((acc, curr) => acc + curr.roi, 0);
   const threshold = 10000; // Threshold after which to display values in
 
+  const [totalAfter6Years, setTotalAfter6Years] = useState(null);
+
+  const calculateTotalAfter6Years = () => {
+    const totalInvested = parseFloat(returnOnInvestment + investedAmount);
+    const interestRate = parseFloat(expectedReturn);
+    let total = totalInvested;
+
+    for (let year = 1; year <= 6; year++) {
+      total += total * (interestRate / 100);
+    }
+
+    setTotalAfter6Years(total);
+  };
+  useEffect(() => {
+    calculateTotalAfter6Years();
+  }, [returnOnInvestment, investedAmount]);
   return (
     <div className="lg:mx-5 mx-2">
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
@@ -230,12 +305,14 @@ const SipCalculatator = () => {
               </span>
             </aside>
             <p className="text-right text-[10px] font-semibold text-red-500">
-              {monthlyInvestment <= 0 && <p>Investment Cant Be ZERO</p>}
+              {monthlyInvestment <= 0 && (
+                <p>Investment Cant Be less than 250</p>
+              )}
             </p>
             <input
               type="range"
-              min="100"
-              max={getMaxInvestmentValue()}
+              min="250"
+              max={maxmoneyyear[investmentInterval]}
               value={monthlyInvestmentSlider}
               onChange={(e) =>
                 handleSliderChange(
@@ -269,7 +346,7 @@ const SipCalculatator = () => {
             <input
               type="range"
               min="1"
-              max="100"
+              max="15"
               value={expectedReturnSlider}
               onChange={(e) =>
                 handleSliderChange(
@@ -281,73 +358,123 @@ const SipCalculatator = () => {
               className="bg-slate-100 text-right  rounded items-end w-full"
             />
           </div>
-          <div className="h-[70px] flex flex-col justify-between">
-            <aside className="flex justify-between items-end relative">
-              <p>Time Period</p>
+          <div className="h-auto lg:h-[70px] flex gap-3 justify-between">
+            <section className="w-[45%] flex flex-col gap-3">
+              <aside className="flex justify-between items-end relative">
+                <p>Girl Age</p>
+                <input
+                  type="text"
+                  value={age}
+                  onChange={handleGirlInputChange}
+                  className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-[70px]"
+                />
+                <span className="absolute right-2 p-[2px] font-semibold italic text-green-700">
+                  Yr
+                </span>
+              </aside>
               <input
-                type="text"
-                value={timePeriod}
-                onChange={(e) =>
-                  handleInputChange(e, setTimePeriod, setTimePeriodSlider)
-                }
-                className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-[150px]"
+                type="range"
+                min="1"
+                max="10"
+                value={age}
+                onChange={handleGirlSliderChange}
+                className="bg-slate-100 text-right rounded items-end w-full"
               />
-              <span className="absolute right-2 p-[2px] font-semibold italic text-green-700">
-                Yr
-              </span>
-            </aside>
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value={timePeriodSlider}
-              onChange={(e) =>
-                handleSliderChange(e, setTimePeriod, setTimePeriodSlider)
-              }
-              className="bg-slate-100 text-right  rounded items-end w-full"
-            />
+            </section>
+            <section className="w-[45%] ">
+              <aside className="lg:flex justify-between items-end relative mb-1">
+                <p>Invested Year</p>
+                <input
+                  type="text"
+                  value={investedYear}
+                  onChange={handleInvestedYearChange}
+                  className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-[150px]"
+                />
+                <span className="absolute right-2 p-[2px] font-semibold italic text-green-700">
+                  Yr
+                </span>
+              </aside>
+              <aside className="lg:flex justify-between items-end relative">
+                <p>Maturity Year</p>
+                <input
+                  type="text"
+                  readOnly
+                  value={maturityYear}
+                  className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-[150px]"
+                />
+                <span className="absolute right-2 p-[2px] font-semibold italic text-green-700">
+                  Yr
+                </span>
+              </aside>
+            </section>
           </div>
         </section>
-        <section className="my-5 flex flex-col  p-2 border-[2px] border-solid border-gray-300 lg:w-1/2 rounded">
+        <section className="my-5 flex flex-col p-2 border-[2px] border-solid border-gray-300 lg:w-1/2 rounded">
           <div className="w-full">
             <p>Invested amount &nbsp;</p>
             <input
               type="text"
-              value={investedAmount?.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
-              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]     w-full "
+              value={
+                isNaN(investedAmount)
+                  ? "0"
+                  : investedAmount?.toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                    })
+              }
+              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-full"
             />{" "}
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
               Rs
             </span>
           </div>
           <div className="w-full">
-            <p>Est returns &nbsp;</p>
+            <p>Return for 15 Years &nbsp;</p>
             <input
               type="text"
-              value={returnOnInvestment?.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
-              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]     w-full"
+              value={
+                isNaN(returnOnInvestment)
+                  ? "0"
+                  : returnOnInvestment?.toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                    })
+              }
+              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-full"
             />{" "}
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
               Rs
             </span>
           </div>
           <div className="w-full">
-            {" "}
-            <p>Total Maturity &nbsp;</p>
+            <p>Total Return for 15 Years &nbsp;</p>
             <input
               type="text"
-              value={(returnOnInvestment + investedAmount)?.toLocaleString(
-                "en-IN",
-                {
-                  maximumFractionDigits: 0,
-                }
-              )}
-              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]      w-full"
+              value={
+                isNaN(returnOnInvestment) || isNaN(investedAmount)
+                  ? 0
+                  : (
+                      Number(returnOnInvestment) + Number(investedAmount)
+                    )?.toLocaleString("en-IN", { maximumFractionDigits: 0 })
+              }
+              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-full"
             />{" "}
+            <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
+              Rs
+            </span>
+          </div>
+          <div className="w-full">
+            <p>Total Maturity Amount after 21 Years</p>
+            <input
+              type="text"
+              value={
+                isNaN(totalAfter6Years)
+                  ? "0"
+                  : totalAfter6Years?.toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                    })
+              }
+              className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px] w-full"
+              readOnly
+            />
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
               Rs
             </span>
@@ -573,4 +700,4 @@ const SipCalculatator = () => {
   );
 };
 
-export default SipCalculatator;
+export default SukanyaSamriddhiYojanaCalculator;

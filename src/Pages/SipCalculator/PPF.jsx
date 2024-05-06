@@ -2,27 +2,15 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import moment from "moment";
 
-const SipCalculatator = () => {
+const PPF = () => {
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
-  const [expectedReturn, setExpectedReturn] = useState("12");
-  const [expectedReturnSlider, setExpectedReturnSlider] = useState("12");
+  const [expectedReturn, setExpectedReturn] = useState("7.1");
+  const [expectedReturnSlider, setExpectedReturnSlider] = useState("7.1");
   const [timePeriod, setTimePeriod] = useState("10");
   const [timePeriodSlider, setTimePeriodSlider] = useState("10");
   const [investmentInterval, setInvestmentInterval] = useState("monthly");
-
-  const handleInputChange = (e, setState, setSliderState) => {
-    let value = e.target.value;
-    setState(value);
-    setSliderState(value);
-  };
-
-  const handleSliderChange = (e, setState, setSliderState) => {
-    const value = e.target.value;
-    setState(value);
-    setSliderState(value);
-  };
 
   const getMaxInvestmentValue = () => {
     switch (investmentInterval) {
@@ -38,6 +26,52 @@ const SipCalculatator = () => {
         return 12000000;
       default:
         return 1000000; // Default to monthly investment limit
+    }
+  };
+  const maxmoneyyear = {
+    daily: 410,
+    weekly: 410 * 7,
+    monthly: 12500,
+    quarterly: 12500 * 3,
+    yearly: 150000,
+  };
+
+  const handleInputChange = (e, setState, setSliderState) => {
+    let value = e.target.value.trim(); // Trim whitespace
+    if (value === "") {
+      setState(""); // Set state to empty string
+      setSliderState(""); // Set slider state to empty string
+      return; // Exit function
+    }
+    value = parseInt(value.replace(/\D/g, "")); // Remove non-digit characters and convert to integer
+    const maxValue = Math.min(
+      getMaxInvestmentValue(),
+      maxmoneyyear[investmentInterval]
+    ); // Get the minimum of max investment value and maxmoneyyear
+
+    // Check if the input value exceeds the maximum allowed value
+    if (value > maxValue) {
+      value = maxValue; // Set the value to the maximum allowed value
+    }
+
+    setState(value);
+    setSliderState(value);
+  };
+
+  const handleSliderChange = (e, setState, setSliderState) => {
+    const value = e.target.value;
+    const maxValue = Math.min(
+      getMaxInvestmentValue(),
+      maxmoneyyear[investmentInterval]
+    ); // Get the minimum of max investment value and maxmoneyyear
+
+    // Check if the slider value exceeds the maximum allowed value
+    if (value > maxValue) {
+      setState(maxValue); // Set the state to the maximum allowed value
+      setSliderState(maxValue);
+    } else {
+      setState(value);
+      setSliderState(value);
     }
   };
 
@@ -230,12 +264,14 @@ const SipCalculatator = () => {
               </span>
             </aside>
             <p className="text-right text-[10px] font-semibold text-red-500">
-              {monthlyInvestment <= 0 && <p>Investment Cant Be ZERO</p>}
+              {monthlyInvestment <= 0 && (
+                <p>Investment Cant Be less than 500</p>
+              )}
             </p>
             <input
               type="range"
               min="100"
-              max={getMaxInvestmentValue()}
+              max={maxmoneyyear[investmentInterval]}
               value={monthlyInvestmentSlider}
               onChange={(e) =>
                 handleSliderChange(
@@ -269,7 +305,7 @@ const SipCalculatator = () => {
             <input
               type="range"
               min="1"
-              max="100"
+              max="15"
               value={expectedReturnSlider}
               onChange={(e) =>
                 handleSliderChange(
@@ -299,7 +335,7 @@ const SipCalculatator = () => {
             <input
               type="range"
               min="1"
-              max="100"
+              max="60"
               value={timePeriodSlider}
               onChange={(e) =>
                 handleSliderChange(e, setTimePeriod, setTimePeriodSlider)
@@ -313,9 +349,13 @@ const SipCalculatator = () => {
             <p>Invested amount &nbsp;</p>
             <input
               type="text"
-              value={investedAmount?.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
+              value={
+                isNaN(investedAmount)
+                  ? "0"
+                  : investedAmount?.toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                    })
+              }
               className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]     w-full "
             />{" "}
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
@@ -326,9 +366,13 @@ const SipCalculatator = () => {
             <p>Est returns &nbsp;</p>
             <input
               type="text"
-              value={returnOnInvestment?.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
+              value={
+                isNaN(returnOnInvestment)
+                  ? "0"
+                  : returnOnInvestment?.toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                    })
+              }
               className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]     w-full"
             />{" "}
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
@@ -336,16 +380,16 @@ const SipCalculatator = () => {
             </span>
           </div>
           <div className="w-full">
-            {" "}
             <p>Total Maturity &nbsp;</p>
             <input
               type="text"
-              value={(returnOnInvestment + investedAmount)?.toLocaleString(
-                "en-IN",
-                {
-                  maximumFractionDigits: 0,
-                }
-              )}
+              value={
+                (isNaN(returnOnInvestment) ? 0 : returnOnInvestment) +
+                (isNaN(investedAmount) ? 0 : investedAmount)?.toLocaleString(
+                  "en-IN",
+                  { maximumFractionDigits: 0 }
+                )
+              }
               className="bg-slate-100 text-right px-1 pr-8 rounded items-end h-[30px]      w-full"
             />{" "}
             <span className="absolute lg:right-[35px] right-[26px] p-[2px] font-semibold italic text-green-700">
@@ -573,4 +617,4 @@ const SipCalculatator = () => {
   );
 };
 
-export default SipCalculatator;
+export default PPF;
