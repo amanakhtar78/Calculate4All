@@ -9,7 +9,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
+    <nav className="bg-gray-800 p-4" style={{ zIndex: 9999 }}>
       <div className="flex justify-between items-center">
         <div>
           <Link to="/" className="text-white font-bold text-xl">
@@ -56,7 +56,7 @@ const Navbar = () => {
       </div>
       {/* Mobile navbar menu */}
       {isOpen && (
-        <div className="lg:hidden fixed top-[40px] left-0 mt-4 w-full z-50 bg-gray-800 p-4">
+        <div className="lg:hidden absolute top-[40px] left-0 mt-4 w-full z-50 bg-gray-800 p-4">
           <ul className="flex flex-col space-y-4">
             <li>
               <Link to="/" className="text-white">

@@ -49,12 +49,8 @@ const CalculateAll = () => {
 
   return (
     <div>
-      <div
-        className="w-auto lg:w-[400px] mx-[2%] mt-[1%] font-extrabold  bg-white"
-        style={{ zIndex: 999 }}
-      >
+      <div className="w-auto lg:w-[400px] mx-[2%] mt-[1%] font-extrabold  bg-white">
         <Select
-          className="z-50"
           value={selectedComponent}
           onChange={handleChange}
           options={options}
