@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -10,9 +12,9 @@ const Navbar = () => {
     <nav className="bg-gray-800 p-4">
       <div className="flex justify-between items-center">
         <div>
-          <a href="#" className="text-white font-bold text-xl">
+          <Link to="/" className="text-white font-bold text-xl">
             Calculate4All
-          </a>
+          </Link>
         </div>
         {/* Hamburger menu button for small screens */}
         <div className="block lg:hidden">
@@ -20,60 +22,61 @@ const Navbar = () => {
             onClick={toggleNavbar}
             className="text-white focus:outline-none focus:text-white"
           >
-            <div className="h-6 w-8 fill-current text-lg font-bold">
-              {isOpen == true ? <p>-!-</p> : <p>-=-</p>}
-            </div>
+            {isOpen ? "-!-" : "-=-"}
           </button>
         </div>
         {/* Navbar menu for large screens */}
         <div className="hidden lg:block">
           <ul className="flex space-x-4">
             <li>
-              <a href="#" className="text-white">
+              <Link to="/" className="text-white">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <Link to="/about" className="text-white">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <a
+                href="https://amanakhtar78.github.io/portfolio-js/"
+                className="text-white"
+              >
                 Services
               </a>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <Link to="/contact" className="text-white">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
       </div>
       {/* Mobile navbar menu */}
       {isOpen && (
-        <div className="lg:hidden fixed  top-[40px] left-0 mt-4 w-full z-50 bg-gray-800 p-4">
-          <ul className="flex flex-col  space-y-4">
+        <div className="lg:hidden fixed top-[40px] left-0 mt-4 w-full z-50 bg-gray-800 p-4">
+          <ul className="flex flex-col space-y-4">
             <li>
-              <a href="#" className="text-white">
+              <Link to="/" className="text-white">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <Link to="/about" className="text-white">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <Link to="/services" className="text-white">
                 Services
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white">
+              <Link to="/contact" className="text-white">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

@@ -3,6 +3,12 @@ import ReactApexChart from "react-apexcharts";
 import moment from "moment";
 
 const SipCalculateWithStepUp = () => {
+  const [showHeading, setShowHeading] = useState(false);
+
+  useEffect(() => {
+    const url = window.location.href;
+    setShowHeading(url.includes("CalculateAll/"));
+  }, []);
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
@@ -231,6 +237,9 @@ const SipCalculateWithStepUp = () => {
 
   return (
     <div className="lg:mx-5 mx-2">
+      <h2 className="mt-2 font-extrabold">
+        {showHeading ? <h1> Step Up Sip Calculatator</h1> : <h1></h1>}
+      </h2>
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
         {/* <p className="text-blue-950 font-semibold text-[30px]  ">
           Sip <span className="text-green-700">Calculator</span>
@@ -651,6 +660,61 @@ const SipCalculateWithStepUp = () => {
           />{" "}
         </div>
       </aside>{" "}
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">What is a Step-up SIP?</h1>
+        <p className="text-gray-700 mb-4">
+          A Step-up SIP is a variation of a traditional SIP where the investment
+          amount increases gradually over time. Instead of investing a fixed
+          amount regularly, in a Step-up SIP, investors have the flexibility to
+          increase their investment amount periodically, usually annually or
+          semi-annually.
+        </p>
+        <h2 className="text-xl font-semibold mb-2">
+          Advantages of Step-up SIP
+        </h2>
+        <p className="text-gray-700 mb-4">
+          Step-up SIPs offer several benefits:
+          <ul className="list-disc pl-5">
+            <li>
+              Allows investors to start with a lower investment amount and
+              gradually increase it over time
+            </li>
+            <li>
+              Helps in aligning investments with increasing income levels or
+              financial goals
+            </li>
+            <li>
+              May lead to higher wealth accumulation over the long term due to
+              increased contributions
+            </li>
+            <li>
+              Provides flexibility to adjust investment amounts based on
+              changing financial circumstances
+            </li>
+          </ul>
+        </p>
+        <h2 className="text-xl font-semibold mb-2">How Step-up SIP Works</h2>
+        <p className="text-gray-700 mb-4">
+          In a Step-up SIP, investors specify the rate at which they want to
+          increase their investment amount. This rate could be a fixed
+          percentage increase or a specific amount. The investment amount
+          automatically increases according to the chosen rate at predefined
+          intervals.
+        </p>
+        <h2 className="text-xl font-semibold mb-2">Example</h2>
+        <p className="text-gray-700 mb-4">
+          Suppose an investor starts a Step-up SIP with an initial investment of
+          Rs 5,000 per month and chooses to increase the investment amount by
+          10% annually. After the first year, the monthly investment amount
+          would increase to Rs 5,500, and in the second year, it would increase
+          further by 10% to Rs 6,050, and so on.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Over time, the investor gradually increases their contribution,
+          allowing for greater wealth accumulation compared to a fixed SIP where
+          the investment amount remains constant.
+        </p>
+      </div>
     </div>
   );
 };

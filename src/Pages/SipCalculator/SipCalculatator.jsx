@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import moment from "moment";
+import { useLocation } from "react-router-dom";
 
 const SipCalculatator = () => {
+  const [showHeading, setShowHeading] = useState(false);
+
+  useEffect(() => {
+    const url = window.location.href;
+    setShowHeading(url.includes("CalculateAll/"));
+  }, []);
+  console.log(showHeading);
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
@@ -184,6 +192,9 @@ const SipCalculatator = () => {
 
   return (
     <div className="lg:mx-5 mx-2">
+      <h2 className="mt-2 font-extrabold">
+        {showHeading ? <h1>Sip Calculatator</h1> : <h1></h1>}
+      </h2>
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
         {/* <p className="text-blue-950 font-semibold text-[30px]  ">
           Sip <span className="text-green-700">Calculator</span>
@@ -569,6 +580,51 @@ const SipCalculatator = () => {
           />{" "}
         </div>
       </aside>{" "}
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">
+          What is a Systematic Investment Plan (SIP)?
+        </h1>
+        <p className="text-gray-700 mb-4">
+          A Systematic Investment Plan (SIP) is a disciplined approach to
+          investing in mutual funds where investors regularly contribute a fixed
+          amount at predetermined intervals, typically monthly or quarterly.
+          SIPs offer the advantage of rupee cost averaging and can help
+          investors achieve their financial goals through systematic and
+          disciplined investing over time.
+        </p>
+        <h2 className="text-xl font-semibold mb-2">
+          Formula for SIP Investment Returns
+        </h2>
+        <p className="text-gray-700 mb-4">
+          The formula for calculating the future value of investments through
+          SIP is based on the compound interest formula:
+        </p>
+        <p className="text-gray-700 mb-4">( FV = P * ((1 + r)^n - 1) / r )</p>
+        <p className="text-gray-700 mb-4">
+          Where:
+          <ul className="list-disc pl-5">
+            <li>FV = Future Value of the investment</li>
+            <li>P = Monthly investment amount</li>
+            <li>
+              r = Monthly interest rate (annual interest rate divided by 12)
+            </li>
+            <li>n = Number of periods (total number of contributions)</li>
+          </ul>
+        </p>
+        <h2 className="text-xl font-semibold mb-2">Example</h2>
+        <p className="text-gray-700 mb-4">
+          Let's assume an investor contributes Rs 5,000 per month to a SIP for
+          10 years with an expected annual return of 12%. Using the formula:
+        </p>
+        <p className="text-gray-700 mb-4">
+          ( FV = 5000 * ((1 + 0.12/12)^(10*12) - 1) / (0.12/12) )
+        </p>
+        <p className="text-gray-700 mb-4">( FV ≈ 10,29,800 )</p>
+        <p className="text-gray-700 mb-4">
+          Therefore, the future value of the investment would be approximately
+          Rs 10,29,800 after 10 years.
+        </p>
+      </div>
     </div>
   );
 };

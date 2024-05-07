@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
@@ -9,17 +8,21 @@ import SipCalculateWithStepUp from "./SipCalculator/SipCalculateWithStepUp";
 import LumSum from "./SipCalculator/LumSum";
 import PPF from "./SipCalculator/PPF";
 import SukanyaSamriddhiYojanaCalculator from "./SipCalculator/SukanyaSamriddhiYojanaCalculator";
+
 const CalculateAll = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
 
   const [selectedComponent, setSelectedComponent] = useState({
-    value: "SipCalculatator",
-    label: "Sip Calculatator ",
+    value: queryParams.get("calculator") || "SipCalculatator",
+    label: queryParams.get("label") || "Sip Calculatator",
   });
+
   const options = [
     {
       value: "SipCalculatator",
-      label: "Sip Calculatator ",
+      label: "Sip Calculatator",
     },
     {
       value: "SipCalculateWithStepUp",
@@ -41,15 +44,17 @@ const CalculateAll = () => {
 
   const handleChange = (selectedOption) => {
     setSelectedComponent(selectedOption);
+    // You can navigate to another page here if needed
   };
 
   return (
     <div>
       <div
-        className="w-auto lg:w-[400px] mx-[2%] mt-[1%] font-extrabold "
+        className="w-auto lg:w-[400px] mx-[2%] mt-[1%] font-extrabold  bg-white"
         style={{ zIndex: 999 }}
       >
         <Select
+          className="z-50"
           value={selectedComponent}
           onChange={handleChange}
           options={options}
@@ -58,21 +63,15 @@ const CalculateAll = () => {
       </div>
 
       <div>
-        {selectedComponent && selectedComponent.value === "SipCalculatator" && (
-          <SipCalculatator />
+        {selectedComponent.value === "SipCalculatator" && <SipCalculatator />}
+        {selectedComponent.value === "SipCalculateWithStepUp" && (
+          <SipCalculateWithStepUp />
         )}
-        {selectedComponent &&
-          selectedComponent.value === "SipCalculateWithStepUp" && (
-            <SipCalculateWithStepUp />
-          )}
-        {selectedComponent && selectedComponent.value === "LumSum" && (
-          <LumSum />
+        {selectedComponent.value === "LumSum" && <LumSum />}
+        {selectedComponent.value === "PPF" && <PPF />}
+        {selectedComponent.value === "SukanyaSamriddhiYojanaCalculator" && (
+          <SukanyaSamriddhiYojanaCalculator />
         )}
-        {selectedComponent && selectedComponent.value === "PPF" && <PPF />}
-        {selectedComponent &&
-          selectedComponent.value === "SukanyaSamriddhiYojanaCalculator" && (
-            <SukanyaSamriddhiYojanaCalculator />
-          )}
       </div>
     </div>
   );

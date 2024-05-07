@@ -3,6 +3,12 @@ import ReactApexChart from "react-apexcharts";
 import moment from "moment";
 
 const SukanyaSamriddhiYojanaCalculator = () => {
+  const [showHeading, setShowHeading] = useState(false);
+
+  useEffect(() => {
+    const url = window.location.href;
+    setShowHeading(url.includes("CalculateAll/"));
+  }, []);
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
@@ -259,6 +265,9 @@ const SukanyaSamriddhiYojanaCalculator = () => {
   }, [returnOnInvestment, investedAmount]);
   return (
     <div className="lg:mx-5 mx-2">
+      <h2 className="mt-2 font-extrabold">
+        {showHeading ? <h1>Sukanya Samriddhi Yojana Calculator</h1> : <h1></h1>}
+      </h2>
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
         {/* <p className="text-blue-950 font-semibold text-[30px]  ">
           Sip <span className="text-green-700">Calculator</span>
@@ -696,6 +705,78 @@ const SukanyaSamriddhiYojanaCalculator = () => {
           />{" "}
         </div>
       </aside>{" "}
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">
+          Understanding Sukanya Samriddhi Yojana (SSY)
+        </h1>
+        <p className="text-gray-700 mb-4">
+          Sukanya Samriddhi Yojana (SSY) is a government-backed savings scheme
+          aimed at promoting the financial security of girl children in India.
+          Launched under the Beti Bachao, Beti Padhao campaign, SSY offers
+          attractive interest rates and tax benefits to encourage parents and
+          guardians to save for the future education and marriage expenses of
+          their daughters.
+        </p>
+        <h2 className="text-xl font-semibold mb-2">
+          Features of Sukanya Samriddhi Yojana
+        </h2>
+        <ul className="list-disc pl-5 text-gray-700 mb-4">
+          <li>
+            Designed exclusively for the welfare of girl children below the age
+            of 10 years
+          </li>
+          <li>
+            Minimum annual deposit of Rs. 250 and a maximum of Rs. 1,50,000
+          </li>
+          <li>
+            Account matures after 21 years from the date of opening or on the
+            marriage of the girl child, whichever is earlier
+          </li>
+          <li>Interest compounded annually and credited to the account</li>
+          <li>
+            Tax exemption on both the investment amount and the interest earned
+          </li>
+          <li>
+            Partial withdrawal allowed after the girl child turns 18, for higher
+            education or marriage
+          </li>
+          <li>Account can be opened at designated banks and post offices</li>
+        </ul>
+        <h2 className="text-xl font-semibold mb-2">
+          Benefits of Sukanya Samriddhi Yojana
+        </h2>
+        <ul className="list-disc pl-5 text-gray-700 mb-4">
+          <li>Secure and guaranteed returns</li>
+          <li>Income tax benefits under Section 80C of the Income Tax Act</li>
+          <li>
+            Long-term savings tool for the education and marriage expenses of
+            girl children
+          </li>
+          <li>Low-risk investment option backed by the government</li>
+          <li>
+            Empowers parents to build a financial corpus for their daughters'
+            future needs
+          </li>
+        </ul>
+        <h2 className="text-xl font-semibold mb-2">
+          How Sukanya Samriddhi Yojana Works
+        </h2>
+        <p className="text-gray-700 mb-4">
+          Parents or legal guardians can open an SSY account in the name of
+          their daughter(s) at authorized banks or post offices. The account
+          requires a minimum deposit, and subsequent contributions can be made
+          annually. The deposited amount earns compound interest, which is
+          calculated annually and credited to the account. Upon maturity, the
+          accumulated corpus, including the principal and interest, can be
+          withdrawn to meet the educational or marriage expenses of the girl
+          child.
+        </p>
+        <p className="text-gray-700">
+          Sukanya Samriddhi Yojana serves as an effective savings tool for
+          securing the future of girl children in India, providing financial
+          stability and empowerment.
+        </p>
+      </div>
     </div>
   );
 };

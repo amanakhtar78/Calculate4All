@@ -3,6 +3,13 @@ import ReactApexChart from "react-apexcharts";
 import moment from "moment";
 
 const PPF = () => {
+  const [showHeading, setShowHeading] = useState(false);
+
+  useEffect(() => {
+    const url = window.location.href;
+    setShowHeading(url.includes("CalculateAll/"));
+  }, []);
+  console.log(showHeading);
   const [monthlyInvestment, setMonthlyInvestment] = useState("5000");
   const [monthlyInvestmentSlider, setMonthlyInvestmentSlider] =
     useState("5000");
@@ -218,6 +225,9 @@ const PPF = () => {
 
   return (
     <div className="lg:mx-5 mx-2">
+      <h2 className="mt-2 font-extrabold">
+        {showHeading ? <h1>PPF Calculatator</h1> : <h1></h1>}
+      </h2>
       <header className="lg:flex justify-between items-baseline text-2xl mt-3">
         {/* <p className="text-blue-950 font-semibold text-[30px]  ">
           Sip <span className="text-green-700">Calculator</span>
@@ -613,6 +623,52 @@ const PPF = () => {
           />{" "}
         </div>
       </aside>{" "}
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">
+          Understanding the Public Provident Fund (PPF)
+        </h1>
+        <p className="text-gray-700 mb-4">
+          The Public Provident Fund (PPF) is a popular long-term investment
+          scheme introduced by the Government of India. It is designed to
+          encourage small savings among individuals while providing attractive
+          returns and income tax benefits.
+        </p>
+        <h2 className="text-xl font-semibold mb-2">Features of PPF</h2>
+        <ul className="list-disc pl-5 text-gray-700 mb-4">
+          <li>Long-term investment with a maturity period of 15 years</li>
+          <li>
+            Minimum annual investment of Rs. 500 and a maximum of Rs. 1,50,000
+          </li>
+          <li>Interest compounded annually and credited to the account</li>
+          <li>Tax-exempt investment under Section 80C of the Income Tax Act</li>
+          <li>Partial withdrawal allowed after the 7th year</li>
+          <li>Loan facility available against the PPF account</li>
+          <li>Account can be opened at designated banks and post offices</li>
+        </ul>
+        <h2 className="text-xl font-semibold mb-2">Benefits of PPF</h2>
+        <ul className="list-disc pl-5 text-gray-700 mb-4">
+          <li>Stable and risk-free returns</li>
+          <li>Income tax benefits on investment and interest earned</li>
+          <li>Flexible investment options with low entry barriers</li>
+          <li>Acts as a retirement savings tool with long-term benefits</li>
+          <li>Can be used as collateral for loans</li>
+        </ul>
+        <h2 className="text-xl font-semibold mb-2">How PPF Works</h2>
+        <p className="text-gray-700 mb-4">
+          Investors can open a PPF account with a designated bank or post office
+          by filling out the necessary forms and depositing the minimum amount.
+          Contributions can be made either in lump sum or in installments
+          throughout the year. The interest rate on PPF is set by the government
+          and is subject to change periodically. The maturity amount, including
+          the principal and accumulated interest, can be withdrawn tax-free at
+          the end of the 15-year term.
+        </p>
+        <p className="text-gray-700">
+          PPF offers a secure and tax-efficient investment option for
+          individuals looking to build wealth over the long term while enjoying
+          tax benefits and financial stability.
+        </p>
+      </div>
     </div>
   );
 };
